@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Lê Hằng English - IELTS Reading Mock Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #FF85A1;
+            --secondary-pink: #FFB3DE;
+            --pastel-yellow: #FEF9E7;
+            --neon-green: #00D26A;
+            --neon-red: #FF4757;
+            --text-dark: #2D3436;
+            --shadow-3d: 0 8px 0 #e6738c;
+            --bg-gradient: linear-gradient(135deg, #FFB3DE 0%, #FF85A1 50%, #74ebd5 100%);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            overflow: hidden;
+            color: var(--text-dark);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* SVG Pattern Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext y='50' font-size='30' opacity='0.2'%3E💰%3C/text%3E%3Ctext x='50' y='90' font-size='30' opacity='0.2'%3E⭐%3C/text%3E%3Ctext x='70' y='30' font-size='25' opacity='0.2'%3E🍭%3C/text%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .teacher-info { line-height: 1.2; }
+        .teacher-info h4 { margin: 0; color: var(--primary-pink); font-size: 14px; font-weight: 800; }
+        .teacher-info p { margin: 0; font-size: 12px; font-weight: 600; opacity: 0.8; }
+
+        .timer-btn {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #d16b84;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .timer-btn:active { transform: translateY(4px); box-shadow: none; }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .pane {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            scroll-behavior: smooth;
+        }
+
+        .left-pane {
+            background: rgba(255, 255, 255, 0.85);
+            border-right: 4px dashed var(--primary-pink);
+        }
+
+        .right-pane {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Tabs */
+        .tab-bar {
+            display: flex;
+            background: white;
+            padding: 10px;
+            border-radius: 20px 20px 0 0;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        .tab-item {
+            padding: 10px 20px;
+            background: #eee;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .tab-item.active { background: var(--primary-pink); color: white; }
+
+        /* Reading Passage Elements */
+        .paragraph { margin-bottom: 25px; line-height: 1.8; font-size: 17px; background: white; padding: 20px; border-radius: 20px; border: 2px solid #FFD1DC; }
+        .paragraph span.highlight { background-color: #FFB3DE !important; border-radius: 4px; }
+        .btn-translate {
+            background: #fff;
+            border: 2px solid var(--primary-pink);
+            color: var(--primary-pink);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .btn-translate:hover { background: var(--primary-pink); color: white; }
+        .translation-text {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #FEEFF3;
+            border-left: 5px solid var(--primary-pink);
+            font-style: italic;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        /* Exercise Elements */
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-3d);
+            border: 3px solid #FFB3DE;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: scale(1.02); }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 20px;
+            text-align: left;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .option-btn:hover { background: var(--pastel-yellow); border-color: var(--primary-pink); }
+        .option-btn.correct { background-color: var(--neon-green) !important; color: white; border-color: #00A352; animation: pop 0.4s; }
+        .option-btn.wrong { background-color: var(--neon-red) !important; color: white; border-color: #D63031; animation: shake 0.4s; }
+
+        .fill-input {
+            border: 2px solid var(--primary-pink);
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            width: 150px;
+            margin: 0 5px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .fill-input:focus { box-shadow: 0 0 10px var(--secondary-pink); }
+
+        .dropdown {
+            width: 100%;
+            padding: 15px;
+            border-radius: 20px;
+            border: 2px solid var(--primary-pink);
+            font-family: inherit;
+            font-weight: 700;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Explanation Box */
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            background: #F1F2F6;
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 6px solid #17C0EB;
+            font-size: 14px;
+        }
+        .locate-btn {
+            background: #17C0EB;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Glossary Table */
+        .glossary-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .glossary-table th { background: var(--primary-pink); color: white; padding: 15px; font-weight: 800; }
+        .glossary-table td { padding: 12px 15px; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
+
+        /* Highlighting feature */
+        ::selection { background: #FFB3DE; }
+
+        /* Progress Bar */
+        .progress-container { width: 100%; height: 12px; background: #eee; border-radius: 6px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: var(--neon-green); width: 0%; transition: width 0.5s; }
+
+        /* Final Result Modal */
+        #resultModal {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 35px;
+            text-align: center;
+            max-width: 500px;
+            animation: bounceIn 0.6s;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="teacher-info">
+        <h4>Ms Lê Hằng English</h4>
+        <p>IELTS READING MOCK TEST</p>
+    </div>
+    <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">
+        <span id="timerIcon">⏱️</span>
+        <span id="timeText">BẮT ĐẦU TÍNH GIỜ LÀM BÀI</span>
+    </button>
+    <div style="width: 150px;">
+        <div style="font-size: 12px; font-weight: 800;">Tiến độ: <span id="progressPercent">0%</span></div>
+        <div class="progress-container"><div class="progress-fill" id="progressBar"></div></div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="pane left-pane" id="readingPane">
+        <h1 style="color: var(--primary-pink); text-align: center;">Coins – the first form of money</h1>
+        
+        <div id="para1" class="paragraph">
+            Few people pay much attention to coins; we take them for granted. Since the advent of paper currency and the abandonment of a monetary system based on intrinsic of actual value, they have been demoted to the status of change: what is left when you have paid for something with 'paper' money. <span id="ev-para1">There is even a belief that they will one day be obsolete, as will paper or plastic notes, and money will at last have achieved the pure status of a mathematical formulation, a system of electronic credits and debits.</span>
+            <button class="btn-translate" onclick="toggleTranslate(1)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans1" class="translation-text">
+                Ít người chú ý nhiều đến tiền xu; chúng ta coi chúng là điều hiển nhiên. Kể từ khi tiền giấy ra đời và hệ thống tiền tệ dựa trên giá trị nội tại hoặc giá trị thực tế bị từ bỏ, chúng đã bị hạ xuống thành tiền lẻ: những gì còn lại khi bạn thanh toán thứ gì đó bằng tiền 'giấy'. Thậm chí còn có niềm tin rằng một ngày nào đó chúng sẽ trở nên lỗi thời, cũng như tiền giấy hoặc tiền nhựa, và tiền tệ cuối cùng sẽ đạt được trạng thái thuần túy của một công thức toán học, một hệ thống các khoản tín dụng và ghi nợ điện tử.
+            </div>
+        </div>
+
+        <div id="para2" class="paragraph">
+            In the modern media environment, the sheer number of visual images is overwhelming, but it makes one stop to think that coins are among the most durable of our artefacts, and future archaeologists will scrutinise coins in order to learn about their distant ancestors. <span id="ev-para2">This is exactly the way ancient coins have informed us for over four millennia. There are thousands of different coins, each designed to carry meaning as well as value, tiny but rich sources of documentary evidence about events and cultural attitudes, frequently produced with exquisite craftsmanship.</span>
+            <button class="btn-translate" onclick="toggleTranslate(2)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans2" class="translation-text">
+                Trong môi trường truyền thông hiện đại, số lượng hình ảnh trực quan là vô cùng lớn, nhưng điều đó khiến người ta phải dừng lại suy nghĩ rằng tiền xu là một trong những hiện vật bền nhất của chúng ta, và các nhà khảo cổ học tương lai sẽ xem xét kỹ lưỡng tiền xu để tìm hiểu về tổ tiên xa xôi của họ. Đây chính là cách mà các đồng tiền cổ đã cung cấp thông tin cho chúng ta trong hơn bốn thiên niên kỷ qua. Có hàng ngàn loại tiền xu khác nhau, mỗi loại được thiết kế để mang ý nghĩa cũng như giá trị, là những nguồn tư liệu nhỏ bé nhưng phong phú về các sự kiện và thái độ văn hóa, thường được tạo ra với tay nghề tinh xảo.
+            </div>
+        </div>
+
+        <div id="para3" class="paragraph">
+            Coins in Europe date from 2,500 to 2,700 years ago, and seem to have originated in the ancient kingdom of Lydia, in what is now Turkey. <span id="ev-para3">Before coins, trade was based on barter: the direct trade of commodities. Barter required the physical presence of both commodities that were being traded. Metal coins were far more portable, and not subject to the same spoilage on long sea journeys as a commodity like grain might be if it became wet.</span> However, they could also be accumulated, and these hoards could be stolen. Coins were therefore a temptation to criminals. <span id="ev-para3-2">The Greeks, however, were the first to realise the full potential of the new invention. They were a trading people of seafarers. Their civilisation, which was composed of dozens of city-states, was highly decentralised. Despite the potential for theft, the Greeks realised that they could benefit enormously from a system that used coins, because it meant that they no longer had to carry goods with them to barter.</span>
+            <button class="btn-translate" onclick="toggleTranslate(3)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans3" class="translation-text">
+                Tiền xu ở Châu Âu có niên đại từ 2.500 đến 2.700 năm trước, và dường như có nguồn gốc từ vương quốc cổ Lydia, thuộc Thổ Nhĩ Kỳ ngày nay. Trước khi có tiền xu, thương mại dựa trên hàng đổi hàng: trao đổi trực tiếp hàng hóa. Hàng đổi hàng đòi hỏi sự hiện diện vật chất của cả hai loại hàng hóa đang được giao dịch. Tiền kim loại cơ động hơn nhiều, và không bị hư hỏng trên các hành trình biển dài như các loại hàng hóa như ngũ cốc nếu bị ướt. Tuy nhiên, chúng cũng có thể bị tích trữ, và những kho tích trữ này có thể bị đánh cắp. Tiền xu do đó là một sự cám dỗ đối với bọn tội phạm. Tuy nhiên, người Hy Lạp là những người đầu tiên nhận ra toàn bộ tiềm năng của phát minh mới. Họ là một dân tộc buôn bán đường biển. Nền văn minh của họ, bao gồm hàng chục thành bang, có tính phi tập trung cao. Bất chấp nguy cơ trộm cắp, người Hy Lạp nhận ra rằng họ có thể hưởng lợi vô cùng lớn từ một hệ thống sử dụng tiền xu, bởi vì điều đó có nghĩa là họ không còn phải mang theo hàng hóa bên mình để trao đổi.
+            </div>
+        </div>
+
+        <div id="para4" class="paragraph">
+            <span id="ev-para4">The value of coins was generally based on the intrinsic value of the metal they were made of.</span> At first this was mostly silver, and this meant that the discovery of silver mines on Greek territory actually increased the quantity of money they could produce. <span id="ev-para4-2">Had the Greek mining been on a larger scale, it could have caused problems similar to those faced by the Spanish centuries later, when so much gold from the New World was brought into their economy that it resulted in serious inflation.</span> One advantage of intrinsic value was that coins could be weighed to determine the amount of metal they contained, so that the only thing an issuing state had to guarantee was the purity of the metal to prevent accusations of fraud and cheating, which could cause fighting and unrest. This was quite difficult to do, especially with coins made of gold, until Archimedes realised that different metals have different weight-volume ratios, and that by measuring the amount of displacement when coins were immersed in water, it was possible to establish whether gold was alloyed with silver.
+            <button class="btn-translate" onclick="toggleTranslate(4)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans4" class="translation-text">
+                Giá trị của tiền xu thường dựa trên giá trị nội tại của kim loại làm ra chúng. Lúc đầu chủ yếu là bạc, và điều này có nghĩa là việc phát hiện ra các mỏ bạc trên lãnh thổ Hy Lạp thực sự đã làm tăng lượng tiền mà họ có thể tạo ra. Nếu hoạt động khai thác của Hy Lạp diễn ra trên quy mô lớn hơn, nó có thể gây ra các vấn đề tương tự như vấn đề mà người Tây Ban Nha phải đối mặt hàng thế kỷ sau đó, khi quá nhiều vàng từ Tân Thế giới được đưa vào nền kinh tế của họ đến mức gây ra lạm phát nghiêm trọng. Một lợi thế của giá trị nội tại là tiền xu có thể được cân để xác định lượng kim loại chúng chứa, do đó, điều duy nhất mà một quốc gia phát hành phải đảm bảo là độ tinh khiết của kim loại để ngăn chặn các cáo buộc gian lận và lừa đảo, vốn có thể gây ra xung đột và bất ổn. Điều này khá khó thực hiện, đặc biệt là với tiền vàng, cho đến khi Archimedes nhận ra rằng các kim loại khác nhau có tỷ lệ trọng lượng-thể tích khác nhau, và bằng cách đo lượng chiếm chỗ khi nhúng tiền xu vào nước, có thể xác định xem vàng có được hợp kim với bạc hay không.
+            </div>
+        </div>
+
+        <div id="para5" class="paragraph">
+            All ancient coins were made by hand using engraved metal moulds. Many hundreds of coins were made, and as a result the moulds often cracked and new ones had to be engraved. <span id="ev-para5">This explains the endless variety encountered in coins with the same designs because the moulds had to be remade repeatedly, by many different artisans. One of the distinctive features of coins, in fact, is that they are the work of anonymous craftsmen, and yet each coin is an intimate reflection of the character of its city of origin.</span> It was the Greeks who realised that coins could have a double function, as a unit of value and as a symbol of the identity of the city that issued them. <span id="ev-para5-2">The Greek view of life was deeply motivated by a spirit of competition, and coins, which circulated around the trading world, were a way of advertising the qualities of each particular city-state.</span>
+            <button class="btn-translate" onclick="toggleTranslate(5)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans5" class="translation-text">
+                Tất cả tiền xu cổ đều được làm bằng tay bằng khuôn kim loại khắc. Hàng trăm đồng xu đã được tạo ra, và kết quả là các khuôn thường bị nứt và các khuôn mới phải được khắc. Điều này giải thích cho sự đa dạng vô tận gặp phải ở các đồng xu có cùng thiết kế vì các khuôn phải được làm lại liên tục bởi nhiều nghệ nhân khác nhau. Một trong những đặc điểm nổi bật của tiền xu là chúng là tác phẩm của những thợ thủ công vô danh, nhưng mỗi đồng xu lại phản ánh mật thiết đặc tính của thành phố xuất xứ của nó. Chính người Hy Lạp đã nhận ra rằng tiền xu có thể có chức năng kép, vừa là một đơn vị giá trị vừa là biểu tượng bản sắc của thành phố phát hành chúng. Quan niệm sống của người Hy Lạp bị thúc đẩy sâu sắc bởi tinh thần cạnh tranh, và tiền xu, lưu thông khắp thế giới thương mại, là một cách để quảng bá các phẩm chất của mỗi thành bang cụ thể.
+            </div>
+        </div>
+
+        <div id="para6" class="paragraph">
+            Interestingly, Greek coins from the city of Athens, which was the home of the greatest sculptors of the classical period, seem to have been completely disconnected from the high sculptural tradition. <span id="ev-para6">The beautiful features of the city's patron, Athena (with her owl on the reverse of the coin), seem to have been repeated virtually unaltered for many years. Perhaps this was because the Athenian currency had grown increasingly to be the international standard and, like the US dollar today, a uniform design implied integrity.</span>
+            <button class="btn-translate" onclick="toggleTranslate(6)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans6" class="translation-text">
+                Thật thú vị, tiền xu Hy Lạp từ thành phố Athens, vốn là quê hương của những nhà điêu khắc vĩ đại nhất thời kỳ cổ điển, dường như hoàn toàn tách biệt khỏi truyền thống điêu khắc cao cấp. Những nét đẹp của vị thần bảo hộ thành phố, Athena (với con cú của cô ở mặt sau đồng xu), dường như đã được lặp lại gần như không đổi trong nhiều năm. Có lẽ điều này là do tiền tệ của người Athens ngày càng phát triển thành tiêu chuẩn quốc tế và, giống như đồng đô la Mỹ ngày nay, một thiết kế đồng nhất ngụ ý tính toàn vẹn.
+            </div>
+        </div>
+
+        <div id="para7" class="paragraph">
+            <span id="ev-para7">One side of a coin was always occupied by the head of a divinity, so it was a relatively small step, at around 323 BC, for Greek coins to replace that head with the portrait of the reigning monarch, a tradition that has continued in monarchies to the present day.</span> Republics may have either symbolic heads – going back to the older tradition of divinities – or the features of a distinguished past head of state. The Romans adopted the Greek practice of coin design and as a result, the features of many great Romans have survived and are known to modern generations, despite the fact that the art of portrait painting was completely lost for more than a millennium following the fall of the Roman Empire.
+            <button class="btn-translate" onclick="toggleTranslate(7)">BẢN DỊCH ĐẦY ĐỦ ✨</button>
+            <div id="trans7" class="translation-text">
+                Một mặt của đồng xu luôn có hình đầu của một vị thần, vì vậy đó là một bước tiến tương đối nhỏ, vào khoảng năm 323 trước Công nguyên, để tiền Hy Lạp thay thế cái đầu đó bằng chân dung của vị vua đang trị vì, một truyền thống tiếp tục ở các chế độ quân chủ cho đến ngày nay. Các nước cộng hòa có thể có những cái đầu mang tính biểu tượng - quay trở lại truyền thống lâu đời về các vị thần - hoặc các đặc điểm của một nguyên thủ quốc gia xuất sắc trong quá khứ. Người La Mã đã áp dụng cách thiết kế tiền xu của người Hy Lạp và kết quả là các đặc điểm của nhiều người La Mã vĩ đại vẫn tồn tại và được các thế hệ hiện đại biết đến, mặc dù thực tế là nghệ thuật vẽ chân dung đã hoàn toàn bị thất truyền trong hơn một thiên niên kỷ sau sự sụp đổ của Đế chế La Mã.
+            </div>
+        </div>
+
+        <h2 style="color: var(--primary-pink); border-bottom: 3px solid var(--primary-pink); display: inline-block;">📚 Academic Glossary</h2>
+        <table class="glossary-table">
+            <thead>
+                <tr>
+                    <th>Word</th>
+                    <th>Type</th>
+                    <th>Meaning & Synonym</th>
+                </tr>
+            </thead>
+            <tbody id="glossaryBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="pane right-pane">
+        <div class="tab-bar">
+            <div class="tab-item active">Coin Reading</div>
+            <div class="tab-item" style="opacity:0.5">Reading 2</div>
+            <div class="tab-item" style="opacity:0.5">Reading 3</div>
+        </div>
+
+        <div id="exercises">
+            <h2 style="color: var(--primary-pink);">Section 1: Headings</h2>
+            
+            <div class="card" id="card-q14">
+                <p><strong>14. Paragraph 1</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'vii', 14)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="ii">ii A form of regional promotion</option>
+                    <option value="vii">vii An uncertain future</option>
+                    <option value="xi">xi Significant records of past societies</option>
+                    <option value="iv">iv Calculating what a coin was worth</option>
+                </select>
+                <div class="explanation" id="exp-14">
+                    <strong>ĐÁP ÁN: vii</strong><br>
+                    <strong>Dẫn chứng:</strong> "There is even a belief that they will one day be obsolete..."<br>
+                    <strong>Dịch:</strong> Thậm chí còn có niềm tin rằng một ngày nào đó chúng sẽ lỗi thời... (Tương lai bất định).<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para1')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q15">
+                <p><strong>15. Paragraph 2</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'xi', 15)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="vii">vii An uncertain future</option>
+                    <option value="xi">xi Significant records of past societies</option>
+                    <option value="v">v A simpler, more efficient way of trading</option>
+                </select>
+                <div class="explanation" id="exp-15">
+                    <strong>ĐÁP ÁN: xi</strong><br>
+                    <strong>Dẫn chứng:</strong> "ancient coins have informed us for over four millennia... rich sources of documentary evidence..."<br>
+                    <strong>Dịch:</strong> Tiền xu cổ đã cung cấp thông tin trong hơn 4 thiên niên kỷ... nguồn bằng chứng tài liệu phong phú.<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para2')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q16">
+                <p><strong>16. Paragraph 3</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'v', 16)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="v">v A simpler, more efficient way of trading</option>
+                    <option value="iv">iv Calculating what a coin was worth</option>
+                    <option value="viii">viii Careless workmanship caused breakages</option>
+                </select>
+                <div class="explanation" id="exp-16">
+                    <strong>ĐÁP ÁN: v</strong><br>
+                    <strong>Dẫn chứng:</strong> "Metal coins were far more portable... they no longer had to carry goods with them to barter."<br>
+                    <strong>Dịch:</strong> Tiền kim loại cơ động hơn... họ không còn phải mang hàng hóa đi trao đổi nữa (Cách giao dịch hiệu quả hơn).<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para3')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q17">
+                <p><strong>17. Paragraph 4</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'iv', 17)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="iv">iv Calculating what a coin was worth</option>
+                    <option value="viii">viii Careless workmanship caused breakages</option>
+                    <option value="ii">ii A form of regional promotion</option>
+                </select>
+                <div class="explanation" id="exp-17">
+                    <strong>ĐÁP ÁN: iv</strong><br>
+                    <strong>Dẫn chứng:</strong> "The value of coins was generally based on the intrinsic value of the metal..."<br>
+                    <strong>Dịch:</strong> Giá trị của tiền xu thường dựa trên giá trị nội tại của kim loại... (Tính toán giá trị đồng xu).<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para4')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q18">
+                <p><strong>18. Paragraph 5</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'ii', 18)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="ii">ii A form of regional promotion</option>
+                    <option value="vi">vi Putting a face to famous historical names</option>
+                    <option value="ix">ix Unchanging coins signalled trustworthiness</option>
+                </select>
+                <div class="explanation" id="exp-18">
+                    <strong>ĐÁP ÁN: ii</strong><br>
+                    <strong>Dẫn chứng:</strong> "advertising the qualities of each particular city-state."<br>
+                    <strong>Dịch:</strong> Quảng bá phẩm chất của mỗi thành bang cụ thể.<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para5-2')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q19">
+                <p><strong>19. Paragraph 6</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'ix', 19)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="ix">ix Unchanging coins signalled trustworthiness</option>
+                    <option value="vii">vii An uncertain future</option>
+                    <option value="vi">vi Putting a face to famous historical names</option>
+                </select>
+                <div class="explanation" id="exp-19">
+                    <strong>ĐÁP ÁN: ix</strong><br>
+                    <strong>Dẫn chứng:</strong> "Athena... repeated virtually unaltered... a uniform design implied integrity."<br>
+                    <strong>Dịch:</strong> Athena... được lặp lại hầu như không đổi... thiết kế đồng nhất ngụ ý tính liêm chính/đáng tin.<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para6')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <div class="card" id="card-q20">
+                <p><strong>20. Paragraph 7</strong></p>
+                <select class="dropdown" onchange="checkAnswer(this, 'vi', 20)">
+                    <option value="">-- Choose Heading --</option>
+                    <option value="vi">vi Putting a face to famous historical names</option>
+                    <option value="vii">vii An uncertain future</option>
+                    <option value="xi">xi Significant records of past societies</option>
+                </select>
+                <div class="explanation" id="exp-20">
+                    <strong>ĐÁP ÁN: vi</strong><br>
+                    <strong>Dẫn chứng:</strong> "replace that head with the portrait of the reigning monarch... features of many great Romans have survived..."<br>
+                    <strong>Dịch:</strong> Thay thế bằng chân dung các vị vua trị vì... chân dung các vĩ nhân La Mã vẫn tồn tại.<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para7')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <h2 style="color: var(--primary-pink);">Section 2: Multiple Choice</h2>
+            <div class="card">
+                <p><strong>21-22. Which TWO of these comments about ancient coins are made by the writer?</strong></p>
+                <button class="option-btn" onclick="checkMultipleChoice(this, true, 21)">A. There is no record of the names of the coin makers.</button>
+                <button class="option-btn" onclick="checkMultipleChoice(this, false, 21)">B. Coins were not popular as payment for traded objects.</button>
+                <button class="option-btn" onclick="checkMultipleChoice(this, true, 21)">C. Coins with the same design often looked quite different.</button>
+                <button class="option-btn" onclick="checkMultipleChoice(this, false, 21)">D. Greek coins were more beautiful in design than Roman coins.</button>
+                <button class="option-btn" onclick="checkMultipleChoice(this, false, 21)">E. At times, too many coins were produced in Greece.</button>
+                
+                <div class="explanation" id="exp-mcq">
+                    <strong>ĐÁP ÁN: A & C</strong><br>
+                    <strong>Dẫn chứng:</strong> "anonymous craftsmen" (thợ vô danh -> A) và "endless variety encountered in coins with the same designs" (đa dạng vô tận cùng thiết kế -> C).<br>
+                    <button class="locate-btn" onclick="locateInText('ev-para5')">📍 Locate Evidence</button>
+                </div>
+            </div>
+
+            <h2 style="color: var(--primary-pink);">Section 3: Summary Completion</h2>
+            <div class="card">
+                <p>The ancient Greek <input type="text" id="ans-23" class="fill-input" placeholder="Enter word..."> was made up of many city-states. Many Greeks were seafarers. Before coins, they had to do this through <input type="text" id="ans-24" class="fill-input" placeholder="Enter word...">. The Greeks liked coins; they had a plentiful supply of <input type="text" id="ans-25" class="fill-input" placeholder="Enter word..."> which they mined, but were able to avoid the problem of <input type="text" id="ans-26" class="fill-input" placeholder="Enter word...">.</p>
+                <button class="timer-btn" style="width: 100%; margin-top: 15px;" onclick="checkSummary()">CHECK SUMMARY 🚀</button>
+                
+                <div class="explanation" id="exp-summary">
+                    <strong>ĐÁP ÁN: 23. civilisation | 24. barter | 25. silver | 26. inflation</strong><br>
+                    <strong>Dẫn chứng:</strong> "civilisation" (para 3), "barter" (para 3), "discovery of silver mines" (para 4), "serious inflation" (para 4).<br>
+                </div>
+            </div>
+
+            <button class="timer-btn" style="width: 100%; height: 60px; font-size: 20px;" onclick="submitFinal()">NỘP BÀI LÀM ✨</button>
+        </div>
+    </div>
+</div>
+
+<div id="resultModal">
+    <div class="modal-content">
+        <h1 id="scoreTitle" style="color: var(--primary-pink); margin: 0;">THIÊN TÀI! 🎉</h1>
+        <div style="font-size: 60px; margin: 20px 0;" id="scoreValue">0/13</div>
+        <p id="scoreComment" style="font-size: 18px; font-weight: 700;"></p>
+        <button class="timer-btn" style="width: 100%;" onclick="location.reload()">LÀM LẠI BÀI 🔄</button>
+    </div>
+</div>
+
+<script>
+    // --- Data Extraction ---
+    const glossary = [
+        {w: "Obsolete", t: "adj", m: "Lỗi thời ~ Outdated"},
+        {w: "Artefacts", t: "n", m: "Hiện vật ~ Objects"},
+        {w: "Scrutinise", t: "v", m: "Xem xét kỹ ~ Examine"},
+        {w: "Intrinsic", t: "adj", m: "Nội tại ~ Essential"},
+        {w: "Portable", t: "adj", m: "Dễ mang theo ~ Handy"},
+        {w: "Curb", t: "v", m: "Kiềm chế ~ Restrict"},
+        {w: "Accumulate", t: "v", m: "Tích trữ ~ Amass"},
+        {w: "Temptation", t: "n", m: "Sự cám dỗ ~ Lure"},
+        {w: "Decentralised", t: "adj", m: "Phi tập trung ~ Divided"},
+        {w: "Purity", t: "n", m: "Độ tinh khiết ~ Cleanliness"},
+        {w: "Fraud", t: "n", m: "Gian lận ~ Deception"},
+        {w: "Alloyed", t: "v", m: "Hợp kim ~ Mixed"},
+        {w: "Engraved", t: "v", m: "Khắc ~ Carved"},
+        {w: "Moulds", t: "n", m: "Khuôn đúc ~ Matrix"},
+        {w: "Anonymous", t: "adj", m: "Ẩn danh ~ Unknown"},
+        {w: "Patron", t: "n", m: "Vị thần bảo hộ ~ Protector"},
+        {w: "Unaltered", t: "adj", m: "Không đổi ~ Consistent"},
+        {w: "Integrity", t: "n", m: "Tính chính trực ~ Honesty"},
+        {w: "Divinity", t: "n", m: "Vị thần ~ God"},
+        {w: "Distinguished", t: "adj", m: "Xuất sắc ~ Eminent"},
+        {w: "Millennium", t: "n", m: "Thiên niên kỷ ~ 1000 years"},
+        {w: "Commodities", t: "n", m: "Hàng hóa ~ Goods"},
+        {w: "Spoilage", t: "n", m: "Hư hỏng ~ Decay"},
+        {w: "Seafarers", t: "n", m: "Người đi biển ~ Sailors"},
+        {w: "Guaranteed", t: "v", m: "Đảm bảo ~ Assured"},
+        {w: "Inflation", t: "n", m: "Lạm phát ~ Price rise"},
+        {w: "Circulate", t: "v", m: "Lưu thông ~ Spread"},
+        {w: "Symbol", t: "n", m: "Ký hiệu ~ Icon"},
+        {w: "Monarchy", t: "n", m: "Chế độ quân chủ"},
+        {w: "Tradition", t: "n", m: "Truyền thống"},
+        {w: "Advent", t: "n", m: "Sự ra đời ~ Arrival"},
+        {w: "Overwhelming", t: "adj", m: "Choáng ngợp"},
+        {w: "Durable", t: "adj", m: "Bền bỉ ~ Lasting"},
+        {w: "Millennia", t: "n", m: "Nhiều thiên niên kỷ"},
+        {w: "Hoards", t: "n", m: "Kho báu/Chỗ cất giấu"},
+        {w: "Accusations", t: "n", m: "Sự cáo buộc"},
+        {w: "Immersed", t: "v", m: "Nhúng vào ~ Submerged"},
+        {w: "Exquisite", t: "adj", m: "Tinh xảo ~ Beautiful"},
+        {w: "Motivation", t: "n", m: "Động lực"},
+        {w: "Patron", t: "n", m: "Người bảo trợ"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"},
+        {w: "Obsolete", t: "adj", m: "Lỗi thời"}
+    ];
+
+    // --- Audio setup ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(freq, type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = type; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+    }
+    const correctSound = () => playSound(800, 'sine');
+    const wrongSound = () => { playSound(300, 'sawtooth'); playSound(250, 'sawtooth'); };
+
+    // --- Core Logic ---
+    let time = 25 * 60;
+    let timerOn = false;
+    let scores = new Set();
+    const totalQuestions = 13;
+
+    function toggleTimer() {
+        if (!timerOn) {
+            timerOn = true;
+            document.getElementById('timeText').innerText = "25:00";
+            const timer = setInterval(() => {
+                if (!timerOn) { clearInterval(timer); return; }
+                time--;
+                let m = Math.floor(time/60);
+                let s = time % 60;
+                document.getElementById('timeText').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                if (time <= 0) {
+                    clearInterval(timer);
+                    alert("Đã hết giờ làm bài! Cố gắng luyện tập trong 20-25 phút nhé!");
+                }
+            }, 1000);
+        } else {
+            timerOn = false;
+            document.getElementById('timeText').innerText = "TIẾP TỤC LÀM BÀI";
+        }
+    }
+
+    function checkAnswer(el, correct, qId) {
+        const exp = document.getElementById(`exp-${qId}`);
+        if (el.value === correct) {
+            el.style.borderColor = "var(--neon-green)";
+            correctSound();
+            scores.add(qId);
+            exp.style.display = "block";
+        } else {
+            el.style.borderColor = "var(--neon-red)";
+            wrongSound();
+            exp.style.display = "block";
+        }
+        updateProgress();
+    }
+
+    function checkMultipleChoice(btn, isCorrect, qId) {
+        if (isCorrect) {
+            btn.classList.add('correct');
+            correctSound();
+            scores.add(qId + btn.innerText[0]);
+        } else {
+            btn.classList.add('wrong');
+            wrongSound();
+        }
+        document.getElementById('exp-mcq').style.display = "block";
+        updateProgress();
+    }
+
+    function checkSummary() {
+        const a23 = document.getElementById('ans-23').value.toLowerCase().trim();
+        const a24 = document.getElementById('ans-24').value.toLowerCase().trim();
+        const a25 = document.getElementById('ans-25').value.toLowerCase().trim();
+        const a26 = document.getElementById('ans-26').value.toLowerCase().trim();
+
+        if(a23 === "civilisation") scores.add(23);
+        if(a24 === "barter") scores.add(24);
+        if(a25 === "silver") scores.add(25);
+        if(a26 === "inflation") scores.add(26);
+
+        document.getElementById('exp-summary').style.display = "block";
+        correctSound();
+        updateProgress();
+    }
+
+    function updateProgress() {
+        // Simple logic for progress: count matched headings + sum completion + MCQs
+        const distinct = new Set([...scores].map(s => String(s).substring(0,2)));
+        const percent = Math.round((distinct.size / totalQuestions) * 100);
+        document.getElementById('progressBar').style.width = percent + "%";
+        document.getElementById('progressPercent').innerText = percent + "%";
+    }
+
+    function toggleTranslate(id) {
+        const el = document.getElementById(`trans${id}`);
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function locateInText(id) {
+        const el = document.getElementById(id);
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('highlight');
+        setTimeout(() => el.classList.remove('highlight'), 3000);
+    }
+
+    function submitFinal() {
+        const distinct = new Set([...scores].map(s => String(s).substring(0,2)));
+        const total = distinct.size;
+        const modal = document.getElementById('resultModal');
+        const scoreVal = document.getElementById('scoreValue');
+        const comment = document.getElementById('scoreComment');
+        const title = document.getElementById('scoreTitle');
+
+        modal.style.display = 'flex';
+        scoreVal.innerText = `${total}/13`;
+
+        if(total >= 11) { title.innerText = "THIÊN TÀI! 👑"; comment.innerText = "Làm tốt lắm, bạn chính là truyền nhân của Ms Lê Hằng!"; }
+        else if(total >= 8) { title.innerText = "TUYỆT VỜI! ✨"; comment.innerText = "Chỉ cần chú ý một chút nữa là được IELTS 9.0 Reading rồi đó!"; }
+        else { title.innerText = "CỐ LÊN NHÉ! ❤️"; comment.innerText = "Xem lại các giải thích chi tiết và bảng từ vựng để tiến bộ hơn nha!"; }
+    }
+
+    // Load glossary
+    const gBody = document.getElementById('glossaryBody');
+    glossary.forEach(item => {
+        gBody.innerHTML += `<tr><td><strong>${item.w}</strong></td><td><i>${item.t}</i></td><td>${item.m}</td></tr>`;
+    });
+
+</script>
+
+</body>
+</html>
